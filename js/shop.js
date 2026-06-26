@@ -27,7 +27,7 @@ const PRODUCTS = {
 
     { id:104, name:'Passport Photographs (6 pcs)', price:2000, category:'Prints',
       rating:4.7, reviews:120,
-      description:'Standard passport-size photographs — 6 high-quality copies ready within 30 minutes. Meets all official Nigerian and international requirements.',
+      description:'Standard passport-size photographs — 6 high-quality copies ready within 30 minutes. Meets all official Sri Lankan and international requirements.',
       image:'https://picsum.photos/seed/studio-passport/400/400' },
 
     { id:105, name:'Canvas Print 20×24 inch', price:12000, category:'Prints',
@@ -119,14 +119,14 @@ const PRODUCTS = {
       description:"Robert Greene's definitive guide to power dynamics, influence, and social strategy. Illustrated with historical examples. Essential reading for ambitious individuals.",
       image:'https://picsum.photos/seed/book-48laws/400/400' },
 
-    { id:306, name:'WAEC Maths Past Questions', price:2500, category:'Academic',
+    { id:306, name:"O/L Mathematics Past Papers", price:2500, category:'Academic',
       rating:4.8, reviews:450,
-      description:'Comprehensive WAEC Mathematics past questions with fully worked solutions from 2010–2024. The #1 exam prep resource for SSCE candidates across Nigeria.',
+      description:"Comprehensive G.C.E. Ordinary Level Mathematics past papers with fully worked solutions from 2010–2024. The #1 exam prep resource for O/L candidates across Sri Lanka.",
       image:'https://picsum.photos/seed/book-waec/400/400' },
 
-    { id:307, name:'JAMB CBT Study Guide', price:3000, category:'Academic',
+    { id:307, name:"A/L Combined Maths Study Guide", price:3000, category:'Academic',
       rating:4.7, reviews:380,
-      description:'All-subject JAMB CBT preparation guide with thousands of practice questions, timed mock tests, and detailed answer explanations for all four UTME subjects.',
+      description:"All-topic G.C.E. Advanced Level Combined Mathematics guide with thousands of practice questions, timed mock tests, and detailed answer explanations for Sri Lankan A/L students.",
       image:'https://picsum.photos/seed/book-jamb/400/400' },
 
     { id:308, name:"My First ABC — Children's Book", price:1800, category:"Children's",
