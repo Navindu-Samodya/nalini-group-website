@@ -5,7 +5,7 @@
    ============================================= */
 
 // ---- Product Catalog ----
-// Each product: id, name, price (₦), category, rating, reviews, description, image
+// Each product: id, name, price (LKR), category, rating, reviews, description, image
 
 const PRODUCTS = {
 
@@ -213,7 +213,7 @@ function renderProducts() {
           <span class="count">(${p.reviews})</span>
         </div>
         <div class="product-footer">
-          <span class="product-price"><span class="cur">₦</span>${p.price.toLocaleString()}</span>
+          <span class="product-price"><span class="cur">LKR</span>&nbsp;${p.price.toLocaleString()}</span>
           <button class="add-btn" id="btn-${p.id}"
                   onclick="handleAdd(event, ${p.id})" title="Add to cart">
             <i class="fas fa-plus"></i>
@@ -259,7 +259,7 @@ function showModal(productId) {
   document.getElementById('modalName').textContent = product.name;
   document.getElementById('modalRating').innerHTML =
     `<span>${stars(product.rating)}</span> <span class="r-count">${product.rating} (${product.reviews} reviews)</span>`;
-  document.getElementById('modalPrice').textContent = '₦' + product.price.toLocaleString();
+  document.getElementById('modalPrice').textContent = 'LKR ' + product.price.toLocaleString();
   document.getElementById('modalDesc').textContent  = product.description;
 
   document.getElementById('modalOverlay').classList.add('open');

@@ -62,7 +62,7 @@ function cartTotal() {
 }
 
 function money(amount) {
-  return '₦' + amount.toLocaleString();
+  return 'LKR ' + amount.toLocaleString();
 }
 
 // ---- Cart: Update the whole UI ----
