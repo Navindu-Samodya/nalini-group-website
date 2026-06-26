@@ -596,6 +596,68 @@ input { font-family:var(--font-body); }
 .process-step h4 { font-family:var(--font-head); margin-bottom:8px; }
 .process-step p  { font-size:0.84rem; color:var(--text-mid); }
 
+/* Energy Business Highlight */
+.energy-highlight {
+  background:linear-gradient(160deg, #071a0b 0%, #0e2d14 55%, #122e19 100%);
+  padding:88px 0;
+  text-align:center;
+}
+.energy-hl-tag {
+  color:#6de09e; font-size:0.78rem; font-weight:600;
+  letter-spacing:4px; text-transform:uppercase; margin-bottom:18px;
+}
+.energy-hl-title {
+  font-family:var(--font-head);
+  font-size:clamp(2rem,4.5vw,3.2rem);
+  color:var(--white); line-height:1.18; margin-bottom:22px;
+}
+.energy-hl-title span { color:#6de09e; }
+.energy-hl-sub {
+  color:rgba(255,255,255,0.65); font-size:1rem;
+  max-width:640px; margin:0 auto 60px; line-height:1.85;
+}
+.energy-feature-row {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px; text-align:left;
+}
+.energy-feature-card {
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(109,224,158,0.18);
+  border-radius:var(--radius-lg); padding:40px 32px;
+  transition:var(--ease); position:relative; overflow:hidden;
+}
+.energy-feature-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#27ae60,#6de09e);
+}
+.energy-feature-card:hover {
+  background:rgba(255,255,255,0.09);
+  transform:translateY(-6px);
+  box-shadow:0 20px 52px rgba(0,0,0,0.35);
+}
+.energy-feature-card--accent {
+  background:rgba(109,224,158,0.1);
+  border-color:rgba(109,224,158,0.38);
+}
+.efc-icon {
+  width:56px; height:56px; border-radius:var(--radius);
+  background:rgba(109,224,158,0.14);
+  display:flex; align-items:center; justify-content:center;
+  color:#6de09e; font-size:1.4rem; margin-bottom:22px;
+}
+.efc-stat {
+  font-family:var(--font-head);
+  font-size:2.8rem; font-weight:700;
+  color:#6de09e; line-height:1; margin-bottom:10px;
+}
+.efc-title {
+  font-family:var(--font-head);
+  font-size:1.18rem; color:var(--white); margin-bottom:12px;
+}
+.efc-desc {
+  font-size:0.86rem; color:rgba(255,255,255,0.62); line-height:1.78;
+}
+
 /* Energy CTA */
 .energy-cta { padding:80px 0; background:linear-gradient(140deg,#0a1f0e,#163a1f); text-align:center; color:var(--white); }
 .energy-cta h2 { font-family:var(--font-head); font-size:2.4rem; margin-bottom:14px; }
@@ -661,6 +723,8 @@ input { font-family:var(--font-body); }
 }
 
 @media (max-width:768px) {
+  .energy-feature-row { grid-template-columns:1fr; }
+
   .nav-links {
     display:none; position:absolute; top:68px; left:0; right:0;
     background:linear-gradient(135deg, #0f0c00 0%, #1a1500 100%); flex-direction:column;
