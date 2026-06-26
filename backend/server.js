@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
@@ -7,6 +8,9 @@ const PORT = 3000;
 // Allow requests from the frontend (any origin during development)
 app.use(cors());
 app.use(express.json());
+
+// Serve the project root (one level up from backend/) as static files
+app.use(express.static(path.join(__dirname, '..')));
 
 // --- Mock product data (replace with DB queries later) ---
 const products = [
