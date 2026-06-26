@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nalini Book Shop | Books for Every Reader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ======== NAVBAR ======== -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">NALINI<span class="logo-accent">GROUP</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="https://agbohotel.com" target="_blank" rel="noopener">Agbo Hotel</a></li>
+        <li><a href="studio.html">Studio</a></li>
+        <li><a href="eshop.html">E-Shop</a></li>
+        <li><a href="bookshop.html">Book Shop</a></li>
+        <li><a href="energy.html">Energy</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="cart-btn" id="cartBtn" aria-label="View cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======== SHOP HERO ======== -->
+  <section class="shop-hero">
+    <div class="container">
+      <div class="shop-hero-content">
+        <p class="tag">Nalini Group</p>
+        <h1>Nalini Book Shop</h1>
+        <span class="sub">Fiction · Non-Fiction · Academic · Children's</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SHOP CONTROLS ======== -->
+  <div class="shop-controls">
+    <div class="container">
+      <div class="controls-inner">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search books...">
+        </div>
+        <div class="filters" id="filterBtns"></div>
+        <span class="results-count" id="resultsCount"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== PRODUCT GRID ======== -->
+  <section class="shop-section">
+    <div class="container">
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </section>
+
+  <!-- ======== PRODUCT MODAL ======== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="product-modal">
+      <div class="modal-img">
+        <img id="modalImg" src="" alt="">
+        <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-content">
+        <p class="modal-cat"  id="modalCat"></p>
+        <h2 class="modal-name" id="modalName"></h2>
+        <div class="modal-rating" id="modalRating"></div>
+        <div class="modal-price"  id="modalPrice"></div>
+        <p class="modal-desc"   id="modalDesc"></p>
+        <button class="modal-add-btn" id="modalAddBtn">
+          <i class="fas fa-shopping-cart"></i>&nbsp; Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== FOOTER ======== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="footer-logo">NALINI<span>GROUP</span></span>
+          <p>A family of distinguished businesses committed to excellence, innovation, and service across Nigeria.</p>
+          <div class="socials">
+            <a href="#" class="soc-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="soc-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="soc-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="soc-link"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Our Businesses</h4>
+          <ul>
+            <li><a href="https://agbohotel.com" target="_blank">Agbo Hotel</a></li>
+            <li><a href="studio.html">Nalini Studio</a></li>
+            <li><a href="eshop.html">Nalini E-Shop</a></li>
+            <li><a href="bookshop.html">Book Shop</a></li>
+            <li><a href="energy.html">Energy Solutions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:info@nalinigroup.com">info@nalinigroup.com</a></li>
+            <li><a href="tel:+2348000000000">+234 800 000 0000</a></li>
+            <li><a href="#">Nigeria</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 Nalini Group. All rights reserved.</p>
+        <p>Made with <i class="fas fa-heart" style="color:var(--gold)"></i> in Nigeria</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======== CART SIDEBAR ======== -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <div>
+        <h3>Your Cart</h3>
+        <p class="hcount">0 items</p>
+      </div>
+      <button class="close-cart" id="closeCart"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span class="lbl">Total</span>
+        <span class="amt">₦0</span>
+      </div>
+      <button class="checkout-btn">Proceed to Checkout</button>
+      <button class="clear-btn">Clear Cart</button>
+    </div>
+  </aside>
+
+  <!-- ======== TOAST ======== -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span class="toast-msg"></span>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/shop.js"></script>
+</body>
+</html>
