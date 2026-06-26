@@ -1,1 +1,14 @@
+# Local tool files
 claude.bat
+
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Environment files
+.env
+backend/.env
+
+# Logs
+*.log
+npm-debug.log*
