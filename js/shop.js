@@ -300,28 +300,59 @@ function initShop() {
   currentShop = detectShop();
   if (!currentShop) return;
 
-  buildFilters();
-  renderProducts();
-
-  // Live search
+  // Wire up all event listeners first — they don't depend on product data
   document.getElementById('searchInput')?.addEventListener('input', e => {
     searchQuery = e.target.value.toLowerCase().trim();
     renderProducts();
   });
-
-  // Close modal
   document.getElementById('modalClose')?.addEventListener('click', hideModal);
   document.getElementById('modalOverlay')?.addEventListener('click', e => {
     if (e.target.id === 'modalOverlay') hideModal();
   });
-
-  // Add to cart from modal
   document.getElementById('modalAddBtn')?.addEventListener('click', () => {
-    if (openProduct) {
-      addToCart(openProduct);
-      hideModal();
-    }
+    if (openProduct) { addToCart(openProduct); hideModal(); }
   });
+
+  // Book Shop loads from the API; Studio and E-Shop use local data as before
+  if (currentShop === 'bookshop') {
+    loadBookshopFromAPI();
+  } else {
+    buildFilters();
+    renderProducts();
+  }
+}
+
+// ---- Fetch Book Shop products from the backend API ----
+
+function loadBookshopFromAPI() {
+  const grid = document.getElementById('productGrid');
+  if (grid) {
+    grid.innerHTML = `
+      <div class="shop-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading books…</p>
+      </div>`;
+  }
+
+  fetch('/api/products?shop=bookshop')
+    .then(res => {
+      if (!res.ok) throw new Error('Server responded with ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      PRODUCTS.bookshop = data.products;
+      buildFilters();
+      renderProducts();
+    })
+    .catch(() => {
+      if (!grid) return;
+      grid.innerHTML = `
+        <div class="no-results">
+          <i class="fas fa-exclamation-circle"></i>
+          <p>Could not load books</p>
+          <small>Please check your connection and refresh the page</small>
+        </div>`;
+    });
 }
 
 document.addEventListener('DOMContentLoaded', initShop);
