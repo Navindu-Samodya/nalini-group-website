@@ -313,34 +313,28 @@ function initShop() {
     if (openProduct) { addToCart(openProduct); hideModal(); }
   });
 
-  // Book Shop loads from the API; Studio and E-Shop use local data as before
-  if (currentShop === 'bookshop') {
-    loadBookshopFromAPI();
-  } else {
-    buildFilters();
-    renderProducts();
-  }
+  loadShopFromAPI(currentShop);
 }
 
-// ---- Fetch Book Shop products from the backend API ----
+// ---- Fetch shop products from the backend API ----
 
-function loadBookshopFromAPI() {
+function loadShopFromAPI(shop) {
   const grid = document.getElementById('productGrid');
   if (grid) {
     grid.innerHTML = `
       <div class="shop-loading">
         <i class="fas fa-spinner fa-spin"></i>
-        <p>Loading books…</p>
+        <p>Loading products…</p>
       </div>`;
   }
 
-  fetch('/api/products?shop=bookshop')
+  fetch('/api/products?shop=' + shop)
     .then(res => {
       if (!res.ok) throw new Error('Server responded with ' + res.status);
       return res.json();
     })
     .then(data => {
-      PRODUCTS.bookshop = data.products;
+      PRODUCTS[shop] = data.products;
       buildFilters();
       renderProducts();
     })
@@ -349,7 +343,7 @@ function loadBookshopFromAPI() {
       grid.innerHTML = `
         <div class="no-results">
           <i class="fas fa-exclamation-circle"></i>
-          <p>Could not load books</p>
+          <p>Could not load products</p>
           <small>Please check your connection and refresh the page</small>
         </div>`;
     });
