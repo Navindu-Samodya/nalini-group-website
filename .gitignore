@@ -12,3 +12,4 @@ backend/.env
 # Logs
 *.log
 npm-debug.log*.claude/
+backend/.env

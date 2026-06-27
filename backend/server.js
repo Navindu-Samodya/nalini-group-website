@@ -1,6 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const pool = require('./db');
 
 const app = express();
 const PORT = 3000;
@@ -143,6 +146,16 @@ const products = [
 // GET /api/health – simple liveness check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Nalini Group API is running' });
+});
+
+// GET /api/db-test – verify MySQL connection
+app.get('/api/db-test', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT 1 AS connected');
+    res.json({ success: true, message: 'MySQL connection successful', result: rows[0] });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'MySQL connection failed', error: err.message });
+  }
 });
 
 // GET /api/products – return all products, or filter by ?shop=studio|eshop|bookshop
