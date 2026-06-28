@@ -13,3 +13,6 @@ backend/.env
 *.log
 npm-debug.log*.claude/
 backend/.env
+
+# Local helper scripts
+mysql.bat
