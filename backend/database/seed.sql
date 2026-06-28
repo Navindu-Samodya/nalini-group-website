@@ -80,7 +80,7 @@ VALUES
    'Capture precious family moments in our warm, child-friendly studio. 3-hour session with themed props. 50 edited digital images delivered.',
    35000, 4.9, 22, 'https://picsum.photos/seed/studio-family/400/400'),
 
-  (@studio_id, @packages, 'Wedding Photography — Full Day',
+  (@studio_id, @packages, 'Wedding Photography - Full Day',
    'Full wedding day coverage from preparation to reception. Two photographers, 300+ edited photos, and a luxury photo album included.',
    150000, 5.0, 15, 'https://picsum.photos/seed/studio-wedding/400/400'),
 
@@ -89,10 +89,10 @@ VALUES
    20000, 4.8, 30, 'https://picsum.photos/seed/studio-album/400/400'),
 
   (@studio_id, @prints, 'Passport Photographs (6 pcs)',
-   'Standard passport-size photographs — 6 high-quality copies ready within 30 minutes. Meets all official Sri Lankan and international requirements.',
+   'Standard passport-size photographs - 6 high-quality copies ready within 30 minutes. Meets all official Sri Lankan and international requirements.',
    2000, 4.7, 120, 'https://picsum.photos/seed/studio-passport/400/400'),
 
-  (@studio_id, @prints, 'Canvas Print 20×24 inch',
+  (@studio_id, @prints, 'Canvas Print 20x24 inch',
    'Gallery-quality canvas print of your favourite photo. Stretched on a solid wood frame and ready to hang. Vivid, fade-resistant archival inks.',
    12000, 4.6, 55, 'https://picsum.photos/seed/studio-canvas/400/400'),
 
@@ -117,11 +117,11 @@ VALUES
    35000, 4.8, 47, 'https://picsum.photos/seed/eshop-watch/400/400'),
 
   (@eshop_id, @electronics, 'USB-C Hub 7-in-1',
-   'Expand your laptop connectivity: HDMI 4K, 3× USB-A, SD & microSD card slots, and USB-C Power Delivery. Plug-and-play, no drivers needed.',
+   'Expand your laptop connectivity: HDMI 4K, 3x USB-A, SD & microSD card slots, and USB-C Power Delivery. Plug-and-play, no drivers needed.',
    18000, 4.5, 55, 'https://picsum.photos/seed/eshop-usbhub/400/400'),
 
   (@eshop_id, @electronics, 'Power Bank 20,000mAh',
-   'High-capacity power bank with 22.5W fast charging. Charges 3 devices simultaneously via USB-A × 2 and USB-C. LED power indicator.',
+   'High-capacity power bank with 22.5W fast charging. Charges 3 devices simultaneously via USB-A x 2 and USB-C. LED power indicator.',
    22000, 4.7, 103, 'https://picsum.photos/seed/eshop-powerbank/400/400'),
 
   (@eshop_id, @bags, 'Premium Laptop Bag 15.6"',
@@ -169,13 +169,13 @@ VALUES
    5500, 4.6, 280, 'https://picsum.photos/seed/book-48laws/400/400'),
 
   (@bookshop_id, @academic, 'O/L Mathematics Past Papers',
-   'Comprehensive G.C.E. Ordinary Level Mathematics past papers with fully worked solutions from 2010–2024. The #1 exam prep resource for O/L candidates across Sri Lanka.',
+   'Comprehensive G.C.E. Ordinary Level Mathematics past papers with fully worked solutions from 2010-2024. The #1 exam prep resource for O/L candidates across Sri Lanka.',
    2500, 4.8, 450, 'https://picsum.photos/seed/book-waec/400/400'),
 
   (@bookshop_id, @academic, 'A/L Combined Maths Study Guide',
    'All-topic G.C.E. Advanced Level Combined Mathematics guide with thousands of practice questions, timed mock tests, and detailed answer explanations for Sri Lankan A/L students.',
    3000, 4.7, 380, 'https://picsum.photos/seed/book-jamb/400/400'),
 
-  (@bookshop_id, @childrens, 'My First ABC — Children''s Book',
-   'Beautifully illustrated full-colour alphabet book for children aged 3–6. Large, friendly print with fun activities on every page. A perfect first book.',
+  (@bookshop_id, @childrens, 'My First ABC - Children''s Book',
+   'Beautifully illustrated full-colour alphabet book for children aged 3-6. Large, friendly print with fun activities on every page. A perfect first book.',
    1800, 4.9, 95, 'https://picsum.photos/seed/book-abc/400/400');
