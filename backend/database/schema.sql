@@ -101,31 +101,32 @@ CREATE TABLE IF NOT EXISTS customers (
 
 -- ------------------------------------------------------------
 --  ORDERS
---  shop_id records which shop the order was placed from.
+--  No shop_id here — one order can span multiple shops.
+--  Shop source is tracked per item in order_items.
+--  order_number is a human-readable reference (e.g. NG-20260628-00001).
 --  total_lkr is stored as a plain LKR integer.
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS orders (
-  id          INT UNSIGNED     NOT NULL AUTO_INCREMENT,
-  customer_id INT UNSIGNED     NOT NULL,
-  shop_id     TINYINT UNSIGNED NOT NULL,
-  status      ENUM(
-                'pending',
-                'confirmed',
-                'processing',
-                'completed',
-                'cancelled'
-              )                NOT NULL DEFAULT 'pending',
-  total_lkr   INT UNSIGNED     NOT NULL DEFAULT 0,
-  notes       TEXT             DEFAULT NULL,
-  created_at  TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at  TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP
-                                        ON UPDATE CURRENT_TIMESTAMP,
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  order_number VARCHAR(30)  NOT NULL,
+  customer_id  INT UNSIGNED NOT NULL,
+  status       ENUM(
+                 'pending',
+                 'confirmed',
+                 'processing',
+                 'completed',
+                 'cancelled'
+               )             NOT NULL DEFAULT 'pending',
+  total_lkr    INT UNSIGNED  NOT NULL DEFAULT 0,
+  notes        TEXT          DEFAULT NULL,
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                      ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
+  UNIQUE KEY uq_order_number (order_number),
   KEY idx_customer (customer_id),
-  KEY idx_shop     (shop_id),
   KEY idx_status   (status),
-  FOREIGN KEY (customer_id) REFERENCES customers (id),
-  FOREIGN KEY (shop_id)     REFERENCES shops     (id)
+  FOREIGN KEY (customer_id) REFERENCES customers (id)
 ) ENGINE=InnoDB;
 
 
