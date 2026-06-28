@@ -132,6 +132,7 @@ function openCart() {
   document.querySelector('.cart-overlay').classList.add('open');
   document.querySelector('.cart-sidebar').classList.add('open');
   document.body.style.overflow = 'hidden';
+  showCheckoutView('cart');
   refreshCartUI();
 }
 
@@ -217,7 +218,8 @@ document.querySelector('.clear-btn')?.addEventListener('click', () => {
 });
 
 document.querySelector('.checkout-btn')?.addEventListener('click', () => {
-  showToast('Checkout portal coming soon!');
+  if (cartCount() === 0) { showToast('Your cart is empty'); return; }
+  showCheckoutView('form');
 });
 
 // Close modal/cart with Escape key
@@ -226,6 +228,112 @@ document.addEventListener('keydown', e => {
     closeCart();
     document.getElementById('modalOverlay')?.classList.remove('open');
     document.body.style.overflow = '';
+  }
+});
+
+// ---- Checkout: Show / hide panels ----
+
+function showCheckoutView(view) {
+  const cartItems  = document.getElementById('cartItems');
+  const cartFooter = document.getElementById('cartFooter');
+  const cfPanel    = document.getElementById('cfPanel');
+  const csPanel    = document.getElementById('csPanel');
+
+  if (cartItems)  cartItems.style.display  = view === 'cart' ? '' : 'none';
+  if (cartFooter) cartFooter.style.display = view === 'cart' ? '' : 'none';
+  if (cfPanel)    cfPanel.classList.toggle('active',   view === 'form');
+  if (csPanel)    csPanel.classList.toggle('active',   view === 'success');
+}
+
+// ---- Checkout: Back button ----
+
+document.getElementById('cfBack')?.addEventListener('click', () => {
+  document.getElementById('cfError').textContent = '';
+  showCheckoutView('cart');
+});
+
+// ---- Checkout: Done (success → close) ----
+
+document.getElementById('csDone')?.addEventListener('click', () => {
+  closeCart();
+});
+
+// ---- Checkout: Form submit ----
+
+document.getElementById('checkoutForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const nameEl    = document.getElementById('cfName');
+  const emailEl   = document.getElementById('cfEmail');
+  const phoneEl   = document.getElementById('cfPhone');
+  const addressEl = document.getElementById('cfAddress');
+  const notesEl   = document.getElementById('cfNotes');
+  const errorEl   = document.getElementById('cfError');
+  const submitBtn = document.getElementById('cfSubmit');
+
+  [nameEl, emailEl, phoneEl, addressEl].forEach(el => el.classList.remove('cf-invalid'));
+  errorEl.textContent = '';
+
+  let valid = true;
+  const required = [
+    { el: nameEl,    label: 'Full name' },
+    { el: emailEl,   label: 'Email' },
+    { el: phoneEl,   label: 'Phone' },
+    { el: addressEl, label: 'Address' },
+  ];
+
+  for (const { el, label } of required) {
+    if (!el.value.trim()) {
+      el.classList.add('cf-invalid');
+      if (valid) errorEl.textContent = label + ' is required.';
+      valid = false;
+    }
+  }
+
+  if (valid && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+    emailEl.classList.add('cf-invalid');
+    errorEl.textContent = 'Enter a valid email address.';
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  const cart    = getCart();
+  const payload = {
+    name:    nameEl.value.trim(),
+    email:   emailEl.value.trim(),
+    phone:   phoneEl.value.trim(),
+    address: addressEl.value.trim(),
+    notes:   notesEl.value.trim() || undefined,
+    items:   cart.map(i => ({ product_id: i.id, quantity: i.quantity })),
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&nbsp; Placing Order...';
+
+  try {
+    const res  = await fetch('/api/orders', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || 'Order failed. Please try again.');
+    }
+
+    document.getElementById('csRef').textContent            = data.order_number;
+    document.getElementById('csTotalConfirmed').textContent = money(data.total_lkr);
+    clearCart();
+    document.getElementById('checkoutForm').reset();
+    showCheckoutView('success');
+
+  } catch (err) {
+    errorEl.textContent = err.message;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i class="fas fa-shopping-bag"></i>&nbsp; Place Order';
   }
 });
 

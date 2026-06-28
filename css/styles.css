@@ -718,6 +718,105 @@ input { font-family:var(--font-body); }
 
 
 /* =============================================
+   CHECKOUT FORM PANEL (inside cart sidebar)
+   ============================================= */
+.cf-panel {
+  display:none; flex:1; overflow-y:auto; flex-direction:column;
+}
+.cf-panel.active { display:flex; }
+
+.cf-panel-inner { padding:18px 22px 28px; }
+
+.cf-back {
+  display:inline-flex; align-items:center; gap:8px;
+  color:var(--text-mid); font-size:0.82rem; font-weight:500;
+  padding:6px 0; margin-bottom:16px; transition:var(--ease);
+}
+.cf-back:hover { color:var(--gold); }
+.cf-back i { font-size:0.75rem; }
+
+.cf-title {
+  font-family:var(--font-head); font-size:1.12rem;
+  color:var(--text-dark); margin-bottom:16px;
+}
+
+.cf-field { margin-bottom:13px; }
+.cf-field label {
+  display:block; font-size:0.72rem; font-weight:600;
+  color:var(--text-mid); margin-bottom:5px;
+  letter-spacing:0.4px; text-transform:uppercase;
+}
+.cf-req { color:var(--red); }
+.cf-field label small { font-weight:400; text-transform:none; color:var(--text-light); }
+
+.cf-field input,
+.cf-field textarea {
+  width:100%; padding:9px 12px;
+  border:1.5px solid var(--gray); border-radius:var(--radius);
+  font-size:0.88rem; color:var(--text-dark); background:var(--white);
+  outline:none; transition:var(--ease); resize:none;
+  font-family:var(--font-body);
+}
+.cf-field input:focus,
+.cf-field textarea:focus {
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,165,32,0.15);
+}
+.cf-field input.cf-invalid,
+.cf-field textarea.cf-invalid { border-color:var(--red); }
+
+.cf-error {
+  color:var(--red); font-size:0.8rem;
+  min-height:18px; margin-bottom:10px; line-height:1.4;
+}
+
+.cf-submit {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  margin-top:4px;
+}
+.cf-submit:disabled { opacity:0.65; cursor:not-allowed; }
+
+
+/* =============================================
+   ORDER SUCCESS PANEL (inside cart sidebar)
+   ============================================= */
+.cs-panel {
+  display:none; flex:1;
+  align-items:center; justify-content:center;
+}
+.cs-panel.active { display:flex; }
+
+.cs-inner { text-align:center; padding:32px 24px; }
+
+.cs-icon {
+  font-size:3.4rem; color:var(--green); margin-bottom:14px;
+  animation:csPopIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes csPopIn { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+
+.cs-heading {
+  font-family:var(--font-head); font-size:1.5rem;
+  color:var(--text-dark); margin-bottom:16px;
+}
+
+.cs-ref {
+  display:inline-block;
+  font-size:0.9rem; font-weight:700; letter-spacing:1px; color:var(--gold);
+  background:rgba(201,165,32,0.1); border:1px solid rgba(201,165,32,0.3);
+  border-radius:var(--radius); padding:8px 18px; margin-bottom:10px;
+}
+
+.cs-total-confirmed {
+  font-size:1.05rem; font-weight:700; color:var(--text-dark); margin-bottom:12px;
+}
+
+.cs-note {
+  font-size:0.82rem; color:var(--text-light);
+  line-height:1.65; margin-bottom:26px;
+}
+
+
+/* =============================================
    RESPONSIVE
    ============================================= */
 @media (max-width:1024px) {
