@@ -200,6 +200,125 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
+// Valid order statuses — mirrors the ENUM in the schema
+const VALID_STATUSES = new Set(['pending', 'confirmed', 'processing', 'completed', 'cancelled']);
+
+// GET /api/orders — list recent orders (newest first, default limit 100)
+app.get('/api/orders', async (req, res) => {
+  const limit = Math.min(Math.max(parseInt(req.query.limit) || 100, 1), 500);
+
+  try {
+    const [rows] = await pool.query(
+      `SELECT
+         o.id,
+         o.order_number,
+         c.name        AS customer_name,
+         c.email       AS customer_email,
+         c.phone       AS customer_phone,
+         o.total_lkr,
+         o.status,
+         o.created_at
+       FROM orders o
+       JOIN customers c ON c.id = o.customer_id
+       ORDER BY o.created_at DESC, o.id DESC
+       LIMIT ?`,
+      [limit]
+    );
+
+    res.json({ success: true, count: rows.length, orders: rows });
+  } catch (err) {
+    console.error('GET /api/orders error:', err.message);
+    res.status(500).json({ success: false, message: 'Failed to load orders' });
+  }
+});
+
+// GET /api/orders/:id — full order detail with customer + items
+app.get('/api/orders/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!Number.isInteger(id) || id < 1) {
+    return res.status(400).json({ success: false, message: 'Invalid order ID' });
+  }
+
+  try {
+    const [[order]] = await pool.query(
+      `SELECT
+         o.id,
+         o.order_number,
+         o.status,
+         o.total_lkr,
+         o.notes,
+         o.created_at,
+         o.updated_at,
+         c.id      AS customer_id,
+         c.name    AS customer_name,
+         c.email   AS customer_email,
+         c.phone   AS customer_phone,
+         c.address AS customer_address
+       FROM orders o
+       JOIN customers c ON c.id = o.customer_id
+       WHERE o.id = ?`,
+      [id]
+    );
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: `Order ${id} not found` });
+    }
+
+    const [items] = await pool.query(
+      `SELECT
+         oi.id,
+         oi.product_id,
+         oi.product_name,
+         s.slug               AS shop,
+         oi.quantity,
+         oi.unit_price,
+         oi.quantity * oi.unit_price AS line_total
+       FROM order_items oi
+       JOIN shops s ON s.id = oi.shop_id
+       WHERE oi.order_id = ?
+       ORDER BY oi.id`,
+      [id]
+    );
+
+    res.json({ success: true, order: { ...order, items } });
+  } catch (err) {
+    console.error('GET /api/orders/:id error:', err.message);
+    res.status(500).json({ success: false, message: 'Failed to load order' });
+  }
+});
+
+// PATCH /api/orders/:id/status — update order status
+app.patch('/api/orders/:id/status', async (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!Number.isInteger(id) || id < 1) {
+    return res.status(400).json({ success: false, message: 'Invalid order ID' });
+  }
+
+  const { status } = req.body;
+  if (!status || !VALID_STATUSES.has(String(status))) {
+    return res.status(400).json({
+      success: false,
+      message: `Invalid status. Must be one of: ${[...VALID_STATUSES].join(', ')}`
+    });
+  }
+
+  try {
+    const [result] = await pool.query(
+      'UPDATE orders SET status = ? WHERE id = ?',
+      [status, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: `Order ${id} not found` });
+    }
+
+    res.json({ success: true, order_id: id, status });
+  } catch (err) {
+    console.error('PATCH /api/orders/:id/status error:', err.message);
+    res.status(500).json({ success: false, message: 'Failed to update order status' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
