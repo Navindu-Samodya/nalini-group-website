@@ -83,6 +83,123 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+// POST /api/orders — place a new order
+app.post('/api/orders', async (req, res) => {
+  const { name, email, phone, address, notes, items } = req.body;
+
+  // --- Validate customer fields ---
+  if (!name  || !String(name).trim())    return res.status(400).json({ success: false, message: 'name is required' });
+  if (!email || !String(email).trim())   return res.status(400).json({ success: false, message: 'email is required' });
+  if (!phone || !String(phone).trim())   return res.status(400).json({ success: false, message: 'phone is required' });
+  if (!address || !String(address).trim()) return res.status(400).json({ success: false, message: 'address is required' });
+
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!EMAIL_RE.test(String(email).trim())) {
+    return res.status(400).json({ success: false, message: 'Invalid email address' });
+  }
+
+  // --- Validate cart ---
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ success: false, message: 'Cart is empty' });
+  }
+
+  for (const item of items) {
+    const id  = Number(item.product_id);
+    const qty = Number(item.quantity);
+    if (!Number.isInteger(id)  || id  < 1) return res.status(400).json({ success: false, message: `Invalid product_id: ${item.product_id}` });
+    if (!Number.isInteger(qty) || qty < 1) return res.status(400).json({ success: false, message: `Invalid quantity for product_id ${item.product_id}` });
+  }
+
+  const productIds = [...new Set(items.map(i => Number(i.product_id)))];
+
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    // --- Fetch products from DB; never trust frontend prices ---
+    const [dbProducts] = await conn.query(
+      `SELECT p.id, p.name, p.price, p.shop_id
+       FROM products p
+       WHERE p.id IN (?) AND p.active = 1`,
+      [productIds]
+    );
+
+    const productMap = new Map(dbProducts.map(p => [p.id, p]));
+
+    for (const id of productIds) {
+      if (!productMap.has(id)) {
+        await conn.rollback();
+        return res.status(400).json({ success: false, message: `Product ID ${id} not found or is unavailable` });
+      }
+    }
+
+    // --- Calculate total from DB prices ---
+    let totalLkr = 0;
+    for (const item of items) {
+      const product = productMap.get(Number(item.product_id));
+      totalLkr += product.price * Number(item.quantity);
+    }
+
+    // --- Create or reuse customer by email ---
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const [existing] = await conn.query(
+      'SELECT id FROM customers WHERE email = ?',
+      [normalizedEmail]
+    );
+
+    let customerId;
+    if (existing.length > 0) {
+      customerId = existing[0].id;
+    } else {
+      const [ins] = await conn.query(
+        'INSERT INTO customers (name, email, phone, address) VALUES (?, ?, ?, ?)',
+        [String(name).trim(), normalizedEmail, String(phone).trim(), String(address).trim()]
+      );
+      customerId = ins.insertId;
+    }
+
+    // --- Insert order with temporary order_number, then update after getting the ID ---
+    const [orderResult] = await conn.query(
+      'INSERT INTO orders (order_number, customer_id, total_lkr, notes) VALUES (?, ?, ?, ?)',
+      [`PENDING-${Date.now()}`, customerId, totalLkr, notes ? String(notes).trim() : null]
+    );
+    const orderId = orderResult.insertId;
+
+    const year        = new Date().getFullYear();
+    const orderNumber = `NG-${year}-${String(orderId).padStart(6, '0')}`;
+
+    await conn.query('UPDATE orders SET order_number = ? WHERE id = ?', [orderNumber, orderId]);
+
+    // --- Insert order_items ---
+    const itemRows = items.map(item => {
+      const p = productMap.get(Number(item.product_id));
+      return [orderId, p.id, p.name, p.shop_id, Number(item.quantity), p.price];
+    });
+
+    await conn.query(
+      `INSERT INTO order_items (order_id, product_id, product_name, shop_id, quantity, unit_price)
+       VALUES ?`,
+      [itemRows]
+    );
+
+    await conn.commit();
+
+    res.status(201).json({
+      success:      true,
+      order_number: orderNumber,
+      order_id:     orderId,
+      total_lkr:    totalLkr
+    });
+
+  } catch (err) {
+    await conn.rollback();
+    console.error('POST /api/orders error:', err.message);
+    res.status(500).json({ success: false, message: 'Failed to place order' });
+  } finally {
+    conn.release();
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
